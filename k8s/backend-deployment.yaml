@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: empresa-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: empresa-backend
+  template:
+    metadata:
+      labels:
+        app: empresa-backend
+    spec:
+      containers:
+      - name: backend
+        image: empresa-backend:latest
+        ports:
+        - containerPort: 3000
+        - containerPort: 3001
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: empresa-secrets
+              key: database-url
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: empresa-secrets
+              key: jwt-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: empresa-backend
+  ports:
+  - name: api
+    port: 3000
+    targetPort: 3000
+  - name: bff
+    port: 3001
+    targetPort: 3001
+  type: ClusterIP
