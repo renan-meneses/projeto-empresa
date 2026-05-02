@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { clientsService } from '../services/clients'
 import { Client } from '../types'
-import { Link } from 'react-router-dom'
+import Navbar from '../components/Navbar'
 
 export default function Clients() {
   const [clients, setClients] = useState<Client[]>([])
   const [showForm, setShowForm] = useState(false)
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', document: '', address: '' })
-  const navigate = useNavigate()
 
   useEffect(() => {
     loadClients()
@@ -36,14 +34,7 @@ export default function Clients() {
 
   return (
     <div className="container">
-      <nav className="navbar">
-        <div className="container">
-          <Link to="/dashboard" style={{ color: 'white', textDecoration: 'none' }}>
-            <h1 style={{ margin: 0 }}>Clientes</h1>
-          </Link>
-          <Link to="/dashboard" className="btn btn-primary">Voltar</Link>
-        </div>
-      </nav>
+      <Navbar title="Clientes" showBackButton />
 
       <div className="card">
         <button onClick={() => setShowForm(!showForm)} className="btn btn-success" style={{ marginBottom: 20 }}>

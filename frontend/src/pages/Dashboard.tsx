@@ -1,36 +1,21 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
 import bff from '../services/bff'
 import { DashboardData } from '../types'
+import Navbar from '../components/Navbar'
 import { Link } from 'react-router-dom'
 
 export default function Dashboard() {
   const [data, setData] = useState<DashboardData | null>(null)
-  const { user, logout } = useAuth()
-  const navigate = useNavigate()
 
   useEffect(() => {
     bff.get('/dashboard').then(res => setData(res.data)).catch(console.error)
   }, [])
 
-  const handleLogout = () => {
-    logout()
-  }
-
   if (!data) return <div>Carregando...</div>
 
   return (
     <div className="container">
-      <nav className="navbar">
-        <div className="container">
-          <h1 style={{ color: 'white', margin: 0 }}>Gestão Empresarial</h1>
-          <div>
-            <span style={{ color: 'white', marginRight: 20 }}>{user?.name}</span>
-            <button onClick={handleLogout} className="btn btn-danger">Sair</button>
-          </div>
-        </div>
-      </nav>
+      <Navbar title="Gestão Empresarial" showUserInfo />
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 20, marginBottom: 30 }}>
         <Link to="/clients" className="card" style={{ textDecoration: 'none', color: 'inherit' }}>

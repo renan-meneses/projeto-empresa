@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { expensesService } from '../services/expenses'
 import { Expense } from '../types'
-import { Link } from 'react-router-dom'
+import Navbar from '../components/Navbar'
 
 export default function Expenses() {
   const [expenses, setExpenses] = useState<Expense[]>([])
@@ -22,7 +22,7 @@ export default function Expenses() {
     await expensesService.create({
       ...formData,
       value: parseFloat(formData.value),
-      date: new Date(formData.date)
+      date: formData.date
     })
     setShowForm(false)
     setFormData({ description: '', value: '', date: '', category: '', supplier: '' })
@@ -38,14 +38,7 @@ export default function Expenses() {
 
   return (
     <div className="container">
-      <nav className="navbar">
-        <div className="container">
-          <Link to="/dashboard" style={{ color: 'white', textDecoration: 'none' }}>
-            <h1 style={{ margin: 0 }}>Gastos</h1>
-          </Link>
-          <Link to="/dashboard" className="btn btn-primary">Voltar</Link>
-        </div>
-      </nav>
+      <Navbar title="Gastos" showBackButton />
 
       <div className="card">
         <button onClick={() => setShowForm(!showForm)} className="btn btn-success" style={{ marginBottom: 20 }}>

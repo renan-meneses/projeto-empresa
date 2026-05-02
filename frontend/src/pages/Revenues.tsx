@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { revenuesService } from '../services/revenues'
 import { clientsService } from '../services/clients'
 import { Revenue, Client } from '../types'
-import { Link } from 'react-router-dom'
+import Navbar from '../components/Navbar'
 
 export default function Revenues() {
   const [revenues, setRevenues] = useState<Revenue[]>([])
@@ -28,7 +28,7 @@ export default function Revenues() {
     await revenuesService.create({
       ...formData,
       value: parseFloat(formData.value),
-      date: new Date(formData.date)
+      date: formData.date
     })
     setShowForm(false)
     setFormData({ description: '', value: '', date: '', clientId: '', category: '' })
@@ -44,14 +44,7 @@ export default function Revenues() {
 
   return (
     <div className="container">
-      <nav className="navbar">
-        <div className="container">
-          <Link to="/dashboard" style={{ color: 'white', textDecoration: 'none' }}>
-            <h1 style={{ margin: 0 }}>Receitas</h1>
-          </Link>
-          <Link to="/dashboard" className="btn btn-primary">Voltar</Link>
-        </div>
-      </nav>
+      <Navbar title="Receitas" showBackButton />
 
       <div className="card">
         <button onClick={() => setShowForm(!showForm)} className="btn btn-success" style={{ marginBottom: 20 }}>

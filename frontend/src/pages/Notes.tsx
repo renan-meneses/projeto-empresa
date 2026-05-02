@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { notesService } from '../services/notes'
 import { clientsService } from '../services/clients'
 import { Note, Client } from '../types'
-import { Link } from 'react-router-dom'
+import Navbar from '../components/Navbar'
 
 export default function Notes() {
   const [notes, setNotes] = useState<Note[]>([])
@@ -46,14 +46,7 @@ export default function Notes() {
 
   return (
     <div className="container">
-      <nav className="navbar">
-        <div className="container">
-          <Link to="/dashboard" style={{ color: 'white', textDecoration: 'none' }}>
-            <h1 style={{ margin: 0 }}>Notas</h1>
-          </Link>
-          <Link to="/dashboard" className="btn btn-primary">Voltar</Link>
-        </div>
-      </nav>
+      <Navbar title="Notas" showBackButton />
 
       <div className="card">
         <button onClick={() => setShowForm(!showForm)} className="btn btn-success" style={{ marginBottom: 20 }}>

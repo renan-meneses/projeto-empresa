@@ -1,14 +1,13 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import api from '../services/api'
+import { useTheme } from '../contexts/ThemeContext'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const { login } = useAuth()
-  const navigate = useNavigate()
+  const { theme, toggleTheme } = useTheme()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -21,6 +20,15 @@ export default function Login() {
 
   return (
     <div className="container" style={{ maxWidth: 400, marginTop: 100 }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 10 }}>
+        <button
+          onClick={toggleTheme}
+          className="btn"
+          style={{ background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
+        >
+          {theme === 'light' ? '🌙' : '☀️'}
+        </button>
+      </div>
       <div className="card">
         <h2 style={{ marginBottom: 20 }}>Login</h2>
         {error && <div style={{ color: 'red', marginBottom: 10 }}>{error}</div>}

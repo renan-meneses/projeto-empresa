@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { contractsService } from '../services/contracts'
 import { clientsService } from '../services/clients'
 import { Contract, Client } from '../types'
-import { Link } from 'react-router-dom'
+import Navbar from '../components/Navbar'
 
 export default function Contracts() {
   const [contracts, setContracts] = useState<Contract[]>([])
@@ -28,8 +28,8 @@ export default function Contracts() {
     await contractsService.create({
       ...formData,
       value: parseFloat(formData.value),
-      startDate: new Date(formData.startDate),
-      endDate: formData.endDate ? new Date(formData.endDate) : undefined
+      startDate: formData.startDate,
+      endDate: formData.endDate || undefined
     })
     setShowForm(false)
     setFormData({ clientId: '', title: '', value: '', startDate: '', endDate: '' })
@@ -45,14 +45,7 @@ export default function Contracts() {
 
   return (
     <div className="container">
-      <nav className="navbar">
-        <div className="container">
-          <Link to="/dashboard" style={{ color: 'white', textDecoration: 'none' }}>
-            <h1 style={{ margin: 0 }}>Contratos</h1>
-          </Link>
-          <Link to="/dashboard" className="btn btn-primary">Voltar</Link>
-        </div>
-      </nav>
+      <Navbar title="Contratos" showBackButton />
 
       <div className="card">
         <button onClick={() => setShowForm(!showForm)} className="btn btn-success" style={{ marginBottom: 20 }}>
