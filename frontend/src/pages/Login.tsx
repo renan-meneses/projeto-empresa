@@ -2,19 +2,30 @@ import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
 
+interface ValidationError {
+  path: string[]
+  message: string
+}
+
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  const [errors, setErrors] = useState<string[]>([])
   const { login } = useAuth()
   const { theme, toggleTheme } = useTheme()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setErrors([])
     try {
       await login(email, password)
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Erro ao fazer login')
+      const data = err.response?.data
+      if (data?.error && Array.isArray(data.error)) {
+        setErrors(data.error.map((e: ValidationError) => e.message))
+      } else {
+        setErrors([data?.error || 'Erro ao fazer login'])
+      }
     }
   }
 
@@ -31,7 +42,11 @@ export default function Login() {
       </div>
       <div className="card">
         <h2 style={{ marginBottom: 20 }}>Login</h2>
-        {error && <div style={{ color: 'red', marginBottom: 10 }}>{error}</div>}
+        {errors.length > 0 && (
+          <div style={{ color: 'red', marginBottom: 10 }}>
+            {errors.map((err, i) => <div key={i}>{err}</div>)}
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Email</label>
